@@ -32,9 +32,6 @@ bullet_width = 5
 bullet_height = 10
 bullet_speed = 7
 
-# Load player image (optional, you can draw a rectangle instead)
-# player_image = pygame.image.load('path_to_spaceship_image.png')
-
 # Player class
 class Player:
     def __init__(self):
@@ -132,13 +129,17 @@ def game_loop():
             # Check for collision with bullets
             for bullet in bullets[:]:
                 if (enemy.x < bullet.x < enemy.x + enemy_width) and (enemy.y < bullet.y < enemy.y + enemy_height):
-                    enemies.remove(enemy)
-                    bullets.remove(bullet)
+                    if enemy in enemies:  # Check if the enemy is still in the list
+                        enemies.remove(enemy)
+                    if bullet in bullets:  # Check if the bullet is still in the list
+                        bullets.remove(bullet)
                     score += 1
+                    break  # Break out of the bullet loop once the enemy is removed
 
             # Remove enemies that go off the screen
             if enemy.y > SCREEN_HEIGHT:
-                enemies.remove(enemy)
+                if enemy in enemies:
+                    enemies.remove(enemy)
 
         # Draw the player
         player.draw(screen)
@@ -155,4 +156,3 @@ def game_loop():
 
 # Run the game
 game_loop()
-
